@@ -28,6 +28,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/ktor-http-api
+      - run: ls -la
       - heroku/deploy-via-git:
           app-name: $HEROKU_APP_NAME
 
@@ -35,3 +36,9 @@ workflows:
   build-and-deploy:
     jobs:
       - build-and-test
+      - deploy-dev:
+          filters:
+            branches:
+              only: [ main ]
+          requires:
+            - build-and-test
