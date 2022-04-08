@@ -8,7 +8,7 @@ jobs:
   build-and-test:
     working_directory: ~/ktor-http-api
     docker:
-      - image: cimg/base:stable
+      - image: cimg/openjdk:17.0.2
     steps:
       - checkout
       - attach_workspace:
@@ -23,7 +23,7 @@ jobs:
   deploy-dev:
     working_directory: ~/ktor-http-api
     docker:
-      - image: cimg/base:stable
+      - image: cimg/openjdk:17.0.2
     steps:
       - checkout
       - attach_workspace:
