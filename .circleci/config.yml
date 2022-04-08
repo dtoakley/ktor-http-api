@@ -1,0 +1,37 @@
+
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@1.2.6
+
+jobs:
+  build-and-test:
+    working_directory: ~/ktor-http-api
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/ktor-http-api
+      - run:
+          name: Build
+          command: ./gradlew shadowJar
+      - persist_to_workspace:
+          root: ~/ktor-http-api
+          paths:
+            - build/libs/*
+  deploy-dev:
+    working_directory: ~/ktor-http-api
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/ktor-http-api
+      - heroku/deploy-via-git:
+          app-name: $HEROKU_APP_NAME
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build-and-test
